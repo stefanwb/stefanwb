@@ -19,7 +19,7 @@ def lookup_req(param):
         raise EnvironmentError(f"Missing required {param} variable!")
 
 
-FILE_DATETIME_FORMAT = '%Y%m%d%H%M%S%f'  # Format: '20190901120012345'
+DATETIME_FORMAT = "%A %d %B %Y"  # Format: 'Sunday 16 May 2021'
 UNTIL_YEAR = 2022
 EXTRA_COLUMNS = sys.argv[1:]
 OUTPUT_FILE = 'zakgeld.csv'
@@ -58,7 +58,7 @@ def main():
     for i in range(d_delta.days):
         incr = datetime.date.today() + datetime.timedelta(days=i)
         if incr.weekday() == 6:
-            output_list.append(incr.strftime("%A %d %B %Y"))
+            output_list.append(incr.strftime(DATETIME_FORMAT))
 
     logger("INFO", f"Output file: {OUTPUT_FILE}")
     with open(OUTPUT_FILE, mode='w') as target_file:
