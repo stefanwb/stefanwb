@@ -20,7 +20,7 @@ def lookup_req(param):
 
 
 DATETIME_FORMAT = "%A %d %B %Y"  # Format: 'Sunday 16 May 2021'
-UNTIL_YEAR = 2022
+UNTIL_YEAR = 2024
 EXTRA_COLUMNS = sys.argv[1:]
 OUTPUT_FILE = 'zakgeld.csv'
 
@@ -29,6 +29,11 @@ try:
 except KeyError:
     LOG_LEVEL = 'INFO'
 
+try:
+    from_year = os.environ['FROM_YEAR']
+    from_date = datetime.date(year=int(from_year), month=1, day=1)
+except KeyError:
+    from_date = datetime.date.today()
 
 def logger(level, msg):
     log_levels = {
@@ -52,11 +57,12 @@ def validate_datetime(string, dt_format):
 def main():
     until_year = UNTIL_YEAR
 
-    d_delta = datetime.date(year=until_year, month=1, day=1) - datetime.date.today()
+
+    d_delta = datetime.date(year=until_year, month=1, day=1) - from_date
 
     output_list = []
     for i in range(d_delta.days):
-        incr = datetime.date.today() + datetime.timedelta(days=i)
+        incr = from_date + datetime.timedelta(days=i)
         if incr.weekday() == 6:
             output_list.append(incr.strftime(DATETIME_FORMAT))
 
